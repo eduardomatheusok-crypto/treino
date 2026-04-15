@@ -67,3 +67,36 @@ Aplicacao: `http://localhost:5173`
 ## Observacao
 
 Nao rodei `npm install` nem os servidores aqui, pois depende de acesso de rede e credenciais do Atlas no ambiente local.
+
+## Deploy em producao (Render + Vercel)
+
+### 1) Publicar o backend no Render
+
+1. Suba este projeto para um repositorio no GitHub
+2. Acesse o Render e clique em **New +** -> **Blueprint**
+3. Selecione o repositorio (o arquivo `render.yaml` sera detectado automaticamente)
+4. No servico `gym-tracker-backend`, configure:
+   - `MONGODB_URI`: string do MongoDB Atlas
+   - `FRONTEND_URL`: URL da Vercel (ex.: `https://seu-front.vercel.app`)
+5. Finalize o deploy e copie a URL do backend (ex.: `https://gym-tracker-backend.onrender.com`)
+
+### 2) Conectar o frontend na Vercel
+
+No projeto da Vercel, em **Settings -> Environment Variables**, adicione:
+
+- `VITE_API_URL=https://sua-api.onrender.com/api`
+
+Depois, faça um novo deploy do frontend.
+
+### 3) Teste final
+
+1. Abra `https://sua-api.onrender.com/api/health` e confirme `{"status":"ok"}`
+2. Abra o front na Vercel e valide criacao de treino e registro de entrada
+
+### 4) Seguranca importante
+
+A string de conexao atual do MongoDB foi exposta no arquivo `.env` local. Recomendo:
+
+1. Trocar a senha do usuario do Atlas imediatamente
+2. Gerar uma nova `MONGODB_URI`
+3. Atualizar a variavel no Render e no `.env` local
