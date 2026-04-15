@@ -6,7 +6,7 @@ import {
   statusLabel
 } from '../services/formatters';
 
-export default function HistoryList({ entries }) {
+export default function HistoryList({ entries, onEdit, onDelete, deletingEntryId }) {
   return (
     <section className="card">
       <h2>Historico</h2>
@@ -19,6 +19,19 @@ export default function HistoryList({ entries }) {
             <article className="history-item" key={entry._id}>
               <header className="history-header">
                 <strong>{formatDate(entry.performedAt)}</strong>
+                <div className="action-row-tight">
+                  <button type="button" className="btn btn-secondary btn-inline" onClick={() => onEdit(entry)}>
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-inline"
+                    onClick={() => onDelete(entry)}
+                    disabled={deletingEntryId === entry._id}
+                  >
+                    {deletingEntryId === entry._id ? 'Excluindo...' : 'Excluir'}
+                  </button>
+                </div>
               </header>
 
               <div className="stack-sm">

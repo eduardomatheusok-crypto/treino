@@ -137,6 +137,20 @@ select:focus {
   background: #c9e3d9;
 }
 
+.btn-danger {
+  background: #b4232f;
+}
+
+.btn-danger:hover {
+  background: #8f1b24;
+}
+
+.btn-inline {
+  width: auto;
+  min-height: 2.2rem;
+  padding: 0.45rem 0.65rem;
+}
+
 .exercise-box {
   border: 1px solid var(--border);
   border-radius: 0.8rem;
@@ -154,7 +168,7 @@ select:focus {
 
 .set-row {
   display: grid;
-  grid-template-columns: 34px 1fr 1fr;
+  grid-template-columns: 34px 1fr 1fr auto;
   gap: 0.35rem;
   align-items: center;
 }
@@ -189,6 +203,10 @@ select:focus {
 }
 
 .history-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.7rem;
   margin-bottom: 0.45rem;
 }
 
@@ -246,6 +264,28 @@ select:focus {
   margin: 0;
 }
 
+.inline-input-group {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.action-row .btn {
+  flex: 1;
+}
+
+.action-row-tight {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
 @media (min-width: 768px) {
   .container {
     padding: 1.3rem;
@@ -255,5 +295,9 @@ select:focus {
   .hero,
   .card {
     padding: 1.2rem;
+  }
+
+  .set-row {
+    grid-template-columns: 42px 1fr 1fr auto;
   }
 }

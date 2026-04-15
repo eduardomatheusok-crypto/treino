@@ -88,6 +88,11 @@ function buildComparison(currentWeightKg, currentReps, previousWeightKg, previou
   };
 }
 
+function toNumber(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
 async function findPreviousExercise(userId, workoutId, performedAt, exerciseName) {
   const previousEntry = await WorkoutEntry.findOne({
     userId,
@@ -135,4 +140,45 @@ export async function appendComparisons({ userId, workoutId, performedAt, exerci
   }
 
   return exercisesWithComparison;
+}
+
+export async function recalculateWorkoutComparisons({ userId, workoutId }) {
+  const entries = await WorkoutEntry.find({ userId, workoutId }).sort({ performedAt: 1, createdAt: 1, _id: 1 });
+  const latestSummaryByExercise = new Map();
+
+  for (const entry of entries) {
+    entry.exercises = entry.exercises.map((exercise) => {
+      const normalizedExercise = {
+        name: String(exercise.name || '').trim(),
+        sets: (exercise.sets || []).map((setItem, index) => ({
+          setNumber: index + 1,
+          weightKg: toNumber(setItem.weightKg),
+          reps: toNumber(setItem.reps)
+        }))
+      };
+
+      const previous = latestSummaryByExercise.get(normalizedExercise.name) || {
+        currentWeightKg: 0,
+        currentReps: 0
+      };
+
+      const current = getExerciseSummary(normalizedExercise);
+
+      const comparison = buildComparison(
+        current.currentWeightKg,
+        current.currentReps,
+        previous.currentWeightKg,
+        previous.currentReps
+      );
+
+      latestSummaryByExercise.set(normalizedExercise.name, current);
+
+      return {
+        ...normalizedExercise,
+        comparison
+      };
+    });
+
+    await entry.save();
+  }
 }

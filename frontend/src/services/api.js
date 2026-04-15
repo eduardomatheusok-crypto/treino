@@ -27,6 +27,17 @@ export const api = {
       body: JSON.stringify(payload)
     });
   },
+  updateWorkout(userId, workoutId, payload) {
+    return request(`/users/${userId}/workouts/${workoutId}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    });
+  },
+  deleteWorkout(userId, workoutId) {
+    return request(`/users/${userId}/workouts/${workoutId}`, {
+      method: 'DELETE'
+    });
+  },
   getEntries(userId, workoutId) {
     return request(`/users/${userId}/workouts/${workoutId}/entries`);
   },
@@ -34,6 +45,17 @@ export const api = {
     return request(`/users/${userId}/workouts/${workoutId}/entries`, {
       method: 'POST',
       body: JSON.stringify(payload)
+    });
+  },
+  updateEntry(userId, workoutId, entryId, payload) {
+    return request(`/users/${userId}/workouts/${workoutId}/entries/${entryId}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload)
+    });
+  },
+  deleteEntry(userId, workoutId, entryId) {
+    return request(`/users/${userId}/workouts/${workoutId}/entries/${entryId}`, {
+      method: 'DELETE'
     });
   }
 };
